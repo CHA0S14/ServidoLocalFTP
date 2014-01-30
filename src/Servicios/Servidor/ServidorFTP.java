@@ -8,7 +8,7 @@ package Servicios.Servidor;
 import Objetos.EnviarFile;
 import Objetos.FileDatos;
 import java.io.File;
-import java.net.ServerSocket;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,57 +16,66 @@ import java.net.ServerSocket;
  */
 public class ServidorFTP {
 
-    private static String path = "c:\\users\\CHAOS\\Documents\\Prueba";
+    private static ArrayList<String> path = new ArrayList();
     private static String host;
-    
+
     public static void main(String[] args) {
-        
-        HiloServidor h = new HiloServidor(new ServidorFTP(),5000);
+
+        path.add("c:\\users\\Dam\\Documents\\Prueba");
+        HiloServidor h = new HiloServidor(new ServidorFTP(), 5000);
         h.start();
-        
+
     }
-    
-    public void realizarOrden(String IPRemota, String orden){
+
+    public void realizarOrden(String IPRemota, String orden) {
         switch (orden) {
             case "inicio":
-                darCarpetas(path);                
+                darCarpetas();
                 break;
-            
+
             case "atras":
-                System.out.println("ha pulsado atras");
+                if(path.size()>1){
+                    path.remove(path.size()-1);
+                    darCarpetas();
+                }
                 break;
 
             case "upload":
                 System.out.println("ha pulsado subir");
                 break;
-                
+
             case "download":
                 System.out.println("ha pulsado bajar");
                 break;
-                
+
             case "mkdir":
                 System.out.println("ha pulsado mkdir");
                 break;
-                
+
             case "rmdir":
                 System.out.println("ha pulsado rmdir");
                 break;
-                
+
             default:
-                System.out.println("a decidido moverse a: " + orden);
+                path.add("\\" + orden);
+                darCarpetas();
                 break;
         }
     }
-    
-    private void darCarpetas(String path){
-        FileDatos file = new FileDatos(new File(path),"path");
 
-        EnviarFile.Envia(file,host,4999);
-        
+    private void darCarpetas() {
+        String subPath="";
+        for (int i = 0; i < path.size(); i++) {
+            subPath = subPath + path.get(i);
+        }
+        FileDatos file = new FileDatos(new File(subPath), "path");
+
+        EnviarFile.Envia(file, host, 4999);
+
     }
-    
-    public void setHost(String host){
-        this.host=host;
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
 }

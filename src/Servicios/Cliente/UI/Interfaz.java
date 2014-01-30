@@ -17,7 +17,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.plaf.ScrollBarUI;
 
 /**
  *
@@ -28,7 +27,7 @@ public class Interfaz {
     private static DefaultListModel listModel = new DefaultListModel();
     private static JList list= new JList();
     private static ClienteFTP cliente;
-    public static JLabel fichAct;
+    public static JLabel fichAct, dirAct;
     private static JFrame frame;
     
     /**
@@ -44,7 +43,7 @@ public class Interfaz {
         JPanel panelList = new JPanel();
         panelList.setLayout(null);
         
-        JLabel dirAct = new JLabel("Carpeta: \" / \"");        
+        dirAct = new JLabel("Carpeta: \" / \"");        
         panelList.add(dirAct);
         dirAct.setBounds(85,30,205,10);
         
@@ -148,6 +147,8 @@ public class Interfaz {
         
         list.setSelectedIndex(0);
         
-        fichAct.setText("Fichero actual: " + ((String) list.getSelectedValue()).substring(1));
+        if(list.getSelectedValue()!=null){
+            fichAct.setText("Fichero actual: " + ((String) list.getSelectedValue()).substring(1));
+        }
     }
 }

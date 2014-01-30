@@ -21,10 +21,8 @@ public class ClienteFTP {
 
     public void realizarOP(String texto) {
         OrdenCliente orden = new OrdenCliente(texto);
-        if (texto.equals("inicio")) {
-            Escuchar h = new Escuchar(this, 4999);
-            h.start();
-        }
+        Escuchar h = new Escuchar(this, 4999);
+        h.start();
         EnviarOrden.Envia(orden, "localhost", 5000);
 
         /*switch (texto) {
