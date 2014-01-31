@@ -19,15 +19,15 @@ import javax.swing.JList;
 public class Listeners extends MouseAdapter {
 
     private static ClienteFTP cliente;
-    private static ArrayList<String> path;
+    public static ArrayList<String> path;
 
     public Listeners(ClienteFTP cliente) {
         Listeners.cliente = cliente;
+        path = new ArrayList();
+        path.add("/");
     }
 
     public Listeners() {
-        path = new ArrayList();
-        path.add("/");
     }
 
     @Override
@@ -36,16 +36,6 @@ public class Listeners extends MouseAdapter {
 
             JButton boton = (JButton) e.getSource();
 
-            if (path.size() > 1 && boton.getName().equals("atras")) {                
-                
-                path.remove(path.size() - 1);
-
-                Interfaz.dirAct.setText("Carpeta: \"" + getPath()+"\"");
-
-                
-                
-            }
-            
             cliente.realizarOP(boton.getName());
 
         } else if (e.getSource() instanceof JList) {
@@ -60,12 +50,6 @@ public class Listeners extends MouseAdapter {
 
                     cliente.realizarOP(valor.substring(1));
 
-                    String subPath = getPath();
-
-                    Interfaz.dirAct.setText("Carpeta: \"" + subPath+"\"");
-
-                } else {
-                    System.out.println("no es una carpeta");
                 }
             }
 
@@ -74,17 +58,7 @@ public class Listeners extends MouseAdapter {
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        //       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private String getPath() {
+    public static String getPath() {
         String subPath = "";
         for (int i = 0; i < path.size(); i++) {
             subPath = subPath + path.get(i);

@@ -25,10 +25,10 @@ import javax.swing.ListSelectionModel;
 public class Interfaz {
     
     private static DefaultListModel listModel = new DefaultListModel();
-    private static JList list= new JList();
+    public static JList list= new JList();
     private static ClienteFTP cliente;
     public static JLabel fichAct, dirAct;
-    private static JFrame frame;
+    public static JFrame frame;
     
     /**
      * @param args the command line arguments
@@ -53,16 +53,16 @@ public class Interfaz {
         
         listModel = new DefaultListModel();
         
-        cliente.realizarOP("inicio");
-        
         list = new JList(listModel);
+        list.addMouseListener(new Listeners(cliente)); 
+        
+        cliente.realizarOP("inicio");        
+        
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         
         list.setCellRenderer(new MyCellRender());
-        panelList.add(new JScrollPane(list));        
-        
-        list.addMouseListener(new Listeners(cliente)); 
+        panelList.add(new JScrollPane(list));      
 
         list.setVisibleRowCount(5);
         
@@ -142,8 +142,8 @@ public class Interfaz {
     public static void setList(ArrayList<String> listita){
         listModel.clear();
         for (int i=0; i<listita.size();i++){
-            listModel.addElement(listita.get(i));            
-        }
+            listModel.addElement(listita.get(i)); 
+        }        
         
         list.setSelectedIndex(0);
         

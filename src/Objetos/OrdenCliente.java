@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 public class OrdenCliente implements Serializable{
     String orden;
+    String nombre;
     
     public OrdenCliente(){
         
@@ -22,8 +23,17 @@ public class OrdenCliente implements Serializable{
     public OrdenCliente(String orden){
         this.orden=orden;
     }
+    
+    public OrdenCliente(String orden, String nombre){
+        this.nombre=nombre;
+        this.orden=orden;
+    }
 
     public String getOrden() {
         return orden;
     }  
+    
+    public String getNombre() {
+        return nombre;
+    } 
 }

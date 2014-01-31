@@ -53,7 +53,7 @@ public class HiloServidor extends Thread {
                 
                 server.setHost(IPRemota);
                 
-                String orden = deserializar(paquete);
+                OrdenCliente orden = deserializar(paquete);
                 
                 server.realizarOrden(IPRemota,orden);
             }
@@ -67,14 +67,14 @@ public class HiloServidor extends Thread {
         }
     }
 
-    public String deserializar(DatagramPacket paquete) {
+    public OrdenCliente deserializar(DatagramPacket paquete) {
         
         ByteArrayInputStream bytesDelPaquete = new ByteArrayInputStream(paquete.getData()); // bytes es el byte[]
         try {
             ObjectInputStream is = new ObjectInputStream(bytesDelPaquete);
             OrdenCliente objetoAuxiliar = (OrdenCliente) is.readObject();
             is.close();
-            return objetoAuxiliar.getOrden();
+            return objetoAuxiliar;
         } catch (IOException ex) {
             System.out.println("Error al extraer datos del paquete");
         } catch (ClassNotFoundException ex) {

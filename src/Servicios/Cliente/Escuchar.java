@@ -6,8 +6,6 @@
 package Servicios.Cliente;
 
 import Objetos.FileDatos;
-import Objetos.OrdenCliente;
-import Servicios.Cliente.ClienteFTP;
 import Servicios.Servidor.HiloServidor;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,8 +42,6 @@ public class Escuchar extends Thread{
         byte recibidos[] = new byte[1024];
 
         try {
-            boolean finalizar = false;
-
             paquete = new DatagramPacket(recibidos, recibidos.length);
 
             socket.receive(paquete);
@@ -58,8 +54,6 @@ public class Escuchar extends Thread{
                 System.out.println("en construccion");
             }
            
-            cliente.setContinuar(true);
-
             socket.close();
 
         } catch (SocketException ex) {
