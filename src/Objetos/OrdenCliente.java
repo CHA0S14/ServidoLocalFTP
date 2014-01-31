@@ -6,6 +6,7 @@
 
 package Objetos;
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,7 @@ import java.io.Serializable;
 public class OrdenCliente implements Serializable{
     String orden;
     String nombre;
+    File file;
     
     public OrdenCliente(){
         
@@ -27,6 +29,11 @@ public class OrdenCliente implements Serializable{
     public OrdenCliente(String orden, String nombre){
         this.nombre=nombre;
         this.orden=orden;
+    }    
+    
+    public OrdenCliente(String orden, File file) {
+        this.orden = orden;
+        this.file = file;
     }
 
     public String getOrden() {
@@ -36,4 +43,8 @@ public class OrdenCliente implements Serializable{
     public String getNombre() {
         return nombre;
     } 
+
+    public File getFile() {
+        return file;
+    }
 }

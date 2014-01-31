@@ -51,6 +51,8 @@ public class Listeners extends MouseAdapter {
                     cliente.realizarOP(valor.substring(1));
 
                 }
+            }else{
+                botones(Integer.valueOf(((String) list.getSelectedValue()).substring(0,1)));
             }
 
             Interfaz.fichAct.setText("Fichero actual: " + ((String) list.getSelectedValue()).substring(1));
@@ -64,6 +66,32 @@ public class Listeners extends MouseAdapter {
             subPath = subPath + path.get(i);
         }
         return subPath;
+    }
+    
+    public static void botones(int valor){
+        switch(valor){
+            case 1:
+                Interfaz.mkdir.setEnabled(true);
+                Interfaz.delD.setEnabled(true);
+                Interfaz.bajar.setEnabled(false);
+                Interfaz.subir.setEnabled(false);
+                Interfaz.del.setEnabled(false);
+                break;
+            case 2:
+                Interfaz.mkdir.setEnabled(false);
+                Interfaz.delD.setEnabled(false);
+                Interfaz.bajar.setEnabled(true);
+                Interfaz.subir.setEnabled(true);
+                Interfaz.del.setEnabled(true);
+                break;
+            default:
+                Interfaz.mkdir.setEnabled(true);
+                Interfaz.delD.setEnabled(false);
+                Interfaz.bajar.setEnabled(false);
+                Interfaz.subir.setEnabled(true);
+                Interfaz.del.setEnabled(false);
+                break;
+        }
     }
 
 }

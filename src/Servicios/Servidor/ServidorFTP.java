@@ -9,7 +9,13 @@ import Objetos.EnviarFile;
 import Objetos.FileDatos;
 import Objetos.OrdenCliente;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,6 +37,7 @@ public class ServidorFTP {
     public void realizarOrden(String IPRemota, OrdenCliente ordenC) {
         String orden = ordenC.getOrden();
         String nombre;
+        File file;
         switch (orden) {
             case "inicio":
                 darCarpetas();
@@ -44,11 +51,15 @@ public class ServidorFTP {
                 break;
 
             case "upload":
-                System.out.println("ha pulsado subir");
-                break;
+                file = ordenC.getFile();
+                crearFile(file);
+                break;            
 
             case "download":
-                System.out.println("ha pulsado bajar");
+                nombre=ordenC.getNombre();
+                file = new File(getPath()+"\\"+nombre);
+                FileDatos pedido = new FileDatos(file, "download");
+                EnviarFile.Envia(pedido, host, 4999);
                 break;
 
             case "mkdir":
@@ -57,8 +68,9 @@ public class ServidorFTP {
                 break;
 
             case "rmdir":
+            case "delete":
                 nombre = ordenC.getNombre();
-                File file = new File(getPath() + "\\" + nombre);
+                file = new File(getPath() + "\\" + nombre);
                 borrarFichero(file);
                 break;
 
@@ -95,7 +107,7 @@ public class ServidorFTP {
         return subPath;
     }
 
-    public void borrarFichero(File dir) {
+    private void borrarFichero(File dir) {
         File[] files = dir.listFiles();
         if (files != null) { //some JVMs return null for empty dirs
             for (File f : files) {
@@ -110,4 +122,32 @@ public class ServidorFTP {
         darCarpetas();
     }
 
+    private void crearFile(File original){
+        FileInputStream in = null;
+        File dest = new File(getPath() + "\\" + original.getName());
+        
+        
+        try { 
+            dest.createNewFile();
+            in = new FileInputStream(original);
+            FileOutputStream out = new FileOutputStream(dest);
+            int c;
+            while( (c = in.read() ) != -1)
+                out.write(c);
+            in.close();
+            out.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        darCarpetas();
+    }
 }

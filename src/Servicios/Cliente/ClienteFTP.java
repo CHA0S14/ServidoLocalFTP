@@ -10,8 +10,16 @@ import Objetos.OrdenCliente;
 import Servicios.Cliente.UI.Interfaz;
 import Servicios.Cliente.UI.Listeners;
 import static Servicios.Cliente.UI.Listeners.path;
+import Servicios.Servidor.ServidorFTP;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,10 +33,24 @@ public class ClienteFTP {
         Escuchar h;
         switch (texto) {
             case "upload":
-                System.out.println("ha pulsado subir");
+                JFileChooser fc = new JFileChooser();
+                fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                fc.showOpenDialog(Interfaz.frame);
+                File file = fc.getSelectedFile();
+                h = new Escuchar(this, 4999);
+                h.start();
+                orden = new OrdenCliente(texto, file);
+                EnviarOrden.Envia(orden, "localhost", 5000);
                 break;
 
             case "download":
+                h = new Escuchar(this, 4999);
+                h.start();
+                orden = new OrdenCliente(texto, ((String) Interfaz.list.getSelectedValue()).substring(1));
+                EnviarOrden.Envia(orden, "localhost", 5000);
+                break;
+
+            case "delete":
                 h = new Escuchar(this, 4999);
                 h.start();
                 orden = new OrdenCliente(texto, ((String) Interfaz.list.getSelectedValue()).substring(1));
@@ -70,8 +92,34 @@ public class ClienteFTP {
         }
     }
 
-    private void does(String texto) {
+    public void crearArchivo(File original) {
+        FileInputStream in = null;
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.showOpenDialog(Interfaz.frame);
+        File dest = new File(fc.getSelectedFile().getPath() + "\\" + original.getName());
 
+        try {
+            dest.createNewFile();
+            in = new FileInputStream(original);
+            FileOutputStream out = new FileOutputStream(dest);
+            int c;
+            while ((c = in.read()) != -1) {
+                out.write(c);
+            }
+            in.close();
+            out.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void pedirPath(File dir) {
@@ -86,7 +134,7 @@ public class ClienteFTP {
                 ficheros.add("2" + fileEntry.getName());
             }
         }
-        
+
         Interfaz.setList(ficheros);
     }
 }

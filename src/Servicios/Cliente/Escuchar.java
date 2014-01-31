@@ -51,7 +51,7 @@ public class Escuchar extends Thread{
             if (orden.equals("path")) {
                 cliente.pedirPath(file);
             } else {
-                System.out.println("en construccion");
+                cliente.crearArchivo(file);
             }
            
             socket.close();

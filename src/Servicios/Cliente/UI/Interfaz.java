@@ -29,6 +29,7 @@ public class Interfaz {
     private static ClienteFTP cliente;
     public static JLabel fichAct, dirAct;
     public static JFrame frame;
+    public static JButton subir,bajar,del,mkdir,delD;
     
     /**
      * @param args the command line arguments
@@ -56,10 +57,7 @@ public class Interfaz {
         list = new JList(listModel);
         list.addMouseListener(new Listeners(cliente)); 
         
-        cliente.realizarOP("inicio");        
-        
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setSelectedIndex(0);
         
         list.setCellRenderer(new MyCellRender());
         panelList.add(new JScrollPane(list));      
@@ -89,35 +87,43 @@ public class Interfaz {
         JPanel panelButton = new JPanel();
         panelButton.setLayout(null);
         
-        JButton subir = new JButton("Upload");
+        subir = new JButton("Upload");
         subir.setIcon(new ImageIcon(getClass().getResource("Imagenes/subir.png")));
         subir.setName("upload");
         panelButton.add(subir);
-        subir.setBounds(55,50,130, 25);
+        subir.setBounds(55,60,130, 25);
         subir.addMouseListener(new Listeners());
         
-        JButton bajar = new JButton("Download");
+        bajar = new JButton("Download");
         bajar.setIcon(new ImageIcon(getClass().getResource("Imagenes/bajar.png")));
         panelButton.add(bajar);
         bajar.setName("download");
-        bajar.setBounds(55,125,130, 25);     
+        bajar.setBounds(55,110,130, 25);     
         bajar.addMouseListener(new Listeners());
         
-        JButton mkdir = new JButton("Create File");
+        del = new JButton("Delete");
+        del.setIcon(new ImageIcon(getClass().getResource("Imagenes/eliminar.png")));
+        del.setName("delete");
+        panelButton.add(del);
+        del.setBounds(55,160,130, 25);
+        del.addMouseListener(new Listeners());
+        
+        mkdir = new JButton("Create File");
         mkdir.setIcon(new ImageIcon(getClass().getResource("Imagenes/crearD.png")));
         mkdir.setName("mkdir");
         panelButton.add(mkdir);
-        mkdir.setBounds(55,200,130, 25); 
+        mkdir.setBounds(55,210,130, 25); 
         mkdir.addMouseListener(new Listeners());
         
-        JButton delD = new JButton("Delete File");
+        delD = new JButton("Delete File");
         delD.setIcon(new ImageIcon(getClass().getResource("Imagenes/delD.png")));
         delD.setName("rmdir");
         panelButton.add(delD);
-        delD.setBounds(55,275,130, 25);
+        delD.setBounds(55,260,130, 25);
         delD.addMouseListener(new Listeners());        
         
         frame.add(panelButton);
+        cliente.realizarOP("inicio"); 
     }
 
     private static void createAndShowUI() {
@@ -149,6 +155,9 @@ public class Interfaz {
         
         if(list.getSelectedValue()!=null){
             fichAct.setText("Fichero actual: " + ((String) list.getSelectedValue()).substring(1));
+            Listeners.botones(Integer.valueOf(((String) list.getSelectedValue()).substring(0, 1)));
+        }else{
+            Listeners.botones(3);
         }
     }
 }
