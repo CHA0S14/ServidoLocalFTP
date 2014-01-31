@@ -18,17 +18,15 @@ import javax.swing.JList;
  */
 public class Listeners extends MouseAdapter {
 
-    private static ClienteFTP cliente;
-    public static ArrayList<String> path;
+    private static ClienteFTP cliente;    
 
     public Listeners(ClienteFTP cliente) {
-        Listeners.cliente = cliente;
-        path = new ArrayList();
-        path.add("/");
+        Listeners.cliente = cliente;        
     }
 
     public Listeners() {
-    }
+        
+    }    
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -46,8 +44,6 @@ public class Listeners extends MouseAdapter {
 
                 if (valor.startsWith("1")) {
 
-                    path.add(valor.substring(1) + "/");
-
                     cliente.realizarOP(valor.substring(1));
 
                 }
@@ -58,15 +54,7 @@ public class Listeners extends MouseAdapter {
             Interfaz.fichAct.setText("Fichero actual: " + ((String) list.getSelectedValue()).substring(1));
 
         }
-    }
-
-    public static String getPath() {
-        String subPath = "";
-        for (int i = 0; i < path.size(); i++) {
-            subPath = subPath + path.get(i);
-        }
-        return subPath;
-    }
+    }    
     
     public static void botones(int valor){
         switch(valor){

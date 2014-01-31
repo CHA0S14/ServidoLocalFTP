@@ -72,6 +72,7 @@ public class Escuchar extends Thread{
             FileDatos objetoAuxiliar = (FileDatos) is.readObject();
             orden = objetoAuxiliar.getOrden();
             is.close();
+            cliente.setPath(objetoAuxiliar.getPath());
             return objetoAuxiliar.getDir();
 
         } catch (IOException ex) {

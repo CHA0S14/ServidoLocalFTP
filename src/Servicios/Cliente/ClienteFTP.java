@@ -9,7 +9,6 @@ import Objetos.EnviarOrden;
 import Objetos.OrdenCliente;
 import Servicios.Cliente.UI.Interfaz;
 import Servicios.Cliente.UI.Listeners;
-import static Servicios.Cliente.UI.Listeners.path;
 import Servicios.Servidor.ServidorFTP;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +26,8 @@ import javax.swing.JOptionPane;
  * @author dam
  */
 public class ClienteFTP {
+    
+    public ArrayList<String> path;
 
     public void realizarOP(String texto) {
         OrdenCliente orden;
@@ -59,7 +60,6 @@ public class ClienteFTP {
 
             case "mkdir":
                 String n = (String) JOptionPane.showInputDialog(Interfaz.frame, "Nombre de la carpeta");
-                Listeners.path.add(n + "/");
                 h = new Escuchar(this, 4999);
                 h.start();
                 orden = new OrdenCliente(texto, n);
@@ -74,8 +74,7 @@ public class ClienteFTP {
                 break;
 
             case "atras":
-                if (Listeners.path.size() > 1) {
-                    path.remove(path.size() - 1);
+                if (path.size() > 1) {
                     orden = new OrdenCliente(texto);
                     h = new Escuchar(this, 4999);
                     h.start();
@@ -124,9 +123,14 @@ public class ClienteFTP {
 
     public void pedirPath(File dir) {
         ArrayList<String> ficheros = new ArrayList();
-
-        Interfaz.dirAct.setText("Carpeta: \"" + Listeners.getPath() + "\"");
-
+        
+        if(getPath().equals("")){
+            Interfaz.dirAct.setText(("Carpeta: \"\\\""));
+        }else{
+            Interfaz.dirAct.setText("Carpeta: \"" + getPath() + "\"");
+        }
+        
+        
         for (final File fileEntry : dir.listFiles()) {
             if (fileEntry.isDirectory() && !fileEntry.isHidden()) {
                 ficheros.add("1" + fileEntry.getName());
@@ -136,5 +140,18 @@ public class ClienteFTP {
         }
 
         Interfaz.setList(ficheros);
+    }
+    
+    public void setPath(ArrayList<String> path){
+        this.path = path;
+        path.set(0,"\\");
+    }
+    
+    public String getPath() {
+        String subPath = "";
+        for (int i = 1; i < path.size(); i++) {
+            subPath = subPath + path.get(i);
+        }
+        return subPath;
     }
 }

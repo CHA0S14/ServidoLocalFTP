@@ -58,7 +58,7 @@ public class ServidorFTP {
             case "download":
                 nombre=ordenC.getNombre();
                 file = new File(getPath()+"\\"+nombre);
-                FileDatos pedido = new FileDatos(file, "download");
+                FileDatos pedido = new FileDatos(file, "download", path);
                 EnviarFile.Envia(pedido, host, 4999);
                 break;
 
@@ -83,7 +83,7 @@ public class ServidorFTP {
 
     private void darCarpetas() {
         String subPath = getPath();
-        FileDatos file = new FileDatos(new File(subPath), "path");
+        FileDatos file = new FileDatos(new File(subPath), "path", path);
 
         EnviarFile.Envia(file, host, 4999);
     }

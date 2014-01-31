@@ -8,6 +8,7 @@ package Objetos;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,10 +17,12 @@ import java.io.Serializable;
 public class FileDatos implements Serializable{
     private File dir;
     private String orden;
+    private ArrayList<String> path;
     
-    public FileDatos(File dir, String orden){
+    public FileDatos(File dir, String orden,ArrayList<String> path){
         this.dir=dir;
         this.orden=orden;
+        this.path=path;
     }
     
     public FileDatos(){
@@ -32,4 +35,8 @@ public class FileDatos implements Serializable{
     public String getOrden() {
         return orden;
     }    
+
+    public ArrayList<String> getPath() {
+        return path;
+    }
 }
