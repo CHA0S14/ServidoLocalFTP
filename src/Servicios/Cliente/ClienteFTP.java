@@ -8,7 +8,6 @@ package Servicios.Cliente;
 import Objetos.EnviarOrden;
 import Objetos.OrdenCliente;
 import Servicios.Cliente.UI.Interfaz;
-import Servicios.Cliente.UI.Listeners;
 import Servicios.Servidor.ServidorFTP;
 import java.io.File;
 import java.io.FileInputStream;
@@ -95,10 +94,10 @@ public class ClienteFTP {
         FileInputStream in = null;
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fc.showOpenDialog(Interfaz.frame);
-        File dest = new File(fc.getSelectedFile().getPath() + "\\" + original.getName());
+        fc.showOpenDialog(Interfaz.frame);        
 
         try {
+            File dest = new File(fc.getSelectedFile().getPath() + "\\" + original.getName());
             dest.createNewFile();
             in = new FileInputStream(original);
             FileOutputStream out = new FileOutputStream(dest);
@@ -110,6 +109,8 @@ public class ClienteFTP {
             out.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (NullPointerException ex) {
+            
         } catch (IOException ex) {
             Logger.getLogger(ServidorFTP.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
