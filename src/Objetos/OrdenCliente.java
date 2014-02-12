@@ -6,6 +6,7 @@
 
 package Objetos;
 
+import Files.ArrayToBytes;
 import java.io.File;
 import java.io.Serializable;
 
@@ -16,7 +17,7 @@ import java.io.Serializable;
 public class OrdenCliente implements Serializable{
     String orden;
     String nombre;
-    File file;
+    byte[] file;
     
     public OrdenCliente(){
         
@@ -31,9 +32,10 @@ public class OrdenCliente implements Serializable{
         this.orden=orden;
     }    
     
-    public OrdenCliente(String orden, File file) {
+    public OrdenCliente(String orden,String nombre, File file) {
         this.orden = orden;
-        this.file = file;
+        this.nombre = nombre;
+        this.file=ArrayToBytes.getBytes(file.getPath());
     }
 
     public String getOrden() {
@@ -44,7 +46,7 @@ public class OrdenCliente implements Serializable{
         return nombre;
     } 
 
-    public File getFile() {
+    public byte[] getFile() {
         return file;
     }
 }

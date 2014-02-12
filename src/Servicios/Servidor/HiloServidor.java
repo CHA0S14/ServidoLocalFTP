@@ -18,6 +18,16 @@ import java.util.logging.Logger;
 /**
  *
  * @author CHAOS
+ * RandomAccessFile f;
+        try {
+            f = new RandomAccessFile(dir, "r");
+            this.dir = new byte[(int) f.length()];
+            f.read(this.dir);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FileDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FileDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
  */
 public class HiloServidor extends Thread {
 
@@ -32,6 +42,7 @@ public class HiloServidor extends Thread {
             Logger.getLogger(HiloServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 
     @Override
     public void run() {
@@ -51,7 +62,7 @@ public class HiloServidor extends Thread {
                 //Información que podemos obtener de la cabecera del paquete
                 IPRemota = paquete.getAddress().getHostName(); 
                 
-                server.setHost(IPRemota);
+                //server.setHost(IPRemota);
                 
                 OrdenCliente orden = deserializar(paquete);
                 
