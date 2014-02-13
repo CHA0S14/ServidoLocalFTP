@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author CHAOS
  */
-public class Escuchar extends Thread{
+public class Escuchar extends Thread {
 
     private final ClienteFTP cliente;
     private static DatagramSocket socket;
@@ -44,64 +44,43 @@ public class Escuchar extends Thread{
 
         try {
             paquete = new DatagramPacket(recibidos, recibidos.length);
-            socket.receive(paquete); 
-            
-            File[] file = deserializar2(paquete);
-           
+            socket.receive(paquete);
 
-            if (orden.equals("path")) {  
-                file = deserializar2(paquete);
-                cliente.pedirPath(file);             
+            ByteArrayInputStream bytesDelPaquete = new ByteArrayInputStream(paquete.getData()); // bytes es el byte[]
+
+            ObjectInputStream is = new ObjectInputStream(bytesDelPaquete);
+
+            FileDatos objetoAuxiliar = (FileDatos) is.readObject();
+
+            orden = objetoAuxiliar.getOrden();
+            is.close();
+
+            if (orden.equals("path")) {
+                File[] file = deserializar2(objetoAuxiliar);
+                cliente.pedirPath(file);
             } else {
-                deserializar(paquete);
-            }          
-            
+                deserializar(objetoAuxiliar);
+            }
+
             socket.close();
         } catch (SocketException ex) {
             System.out.println("Error al asignar el socket");
         } catch (IOException ex) {
             System.out.println("Error en la recepción del paquete");
-        }    
-    }
-
-    public void deserializar(DatagramPacket paquete) {
-
-        ByteArrayInputStream bytesDelPaquete = new ByteArrayInputStream(paquete.getData()); // bytes es el byte[]
-        try {
-            ObjectInputStream is = new ObjectInputStream(bytesDelPaquete);
-
-            FileDatos objetoAuxiliar = (FileDatos) is.readObject();
-            orden = objetoAuxiliar.getOrden();
-            is.close();
-            cliente.setPath(objetoAuxiliar.getPath());
-            ArrayToBytes.getFileCliente(objetoAuxiliar.getDir());            
-
-        } catch (IOException ex) {
-            System.out.println("Error al extraer datos del paquete");
         } catch (ClassNotFoundException ex) {
-            System.out.println("Error al convertir a Objeto");
+            Logger.getLogger(Escuchar.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public File[] deserializar2(DatagramPacket paquete) {
+    public void deserializar(FileDatos objetoAuxiliar) {
+        cliente.setPath(objetoAuxiliar.getPath());
+        ArrayToBytes.getFileCliente(objetoAuxiliar.getDir());
+    }
 
-        ByteArrayInputStream bytesDelPaquete = new ByteArrayInputStream(paquete.getData()); // bytes es el byte[]
-        try {
-            ObjectInputStream is = new ObjectInputStream(bytesDelPaquete);
+    public File[] deserializar2(FileDatos objetoAuxiliar) {
 
-            FileDatos objetoAuxiliar = (FileDatos) is.readObject();
-            
-            orden = objetoAuxiliar.getOrden();
-            is.close();
-            cliente.setBooleans(objetoAuxiliar.getBooleans());
-            cliente.setPath(objetoAuxiliar.getPath());               
-            return objetoAuxiliar.getFile();
-
-        } catch (IOException ex) {
-            System.out.println("Error al extraer datos del paquete");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error al convertir a Objeto");
-        }
-        return null;
+        cliente.setBooleans(objetoAuxiliar.getBooleans());
+        cliente.setPath(objetoAuxiliar.getPath());
+        return objetoAuxiliar.getFile();
     }
 }

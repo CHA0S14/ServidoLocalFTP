@@ -28,7 +28,8 @@ public class ClienteFTP {
 
     public void realizarOP(String texto) {
         OrdenCliente orden;
-        String serv="10.8.7.2";
+        String serv="10.8.7.3";
+        int puertoServ=5000, puertoCli=4999;
         Escuchar h;
         switch (texto) {
             case "upload":
@@ -36,55 +37,55 @@ public class ClienteFTP {
                 fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fc.showOpenDialog(Interfaz.frame);
                 File file = fc.getSelectedFile();
-                h = new Escuchar(this, 4999);
+                h = new Escuchar(this, puertoCli);
                 h.start();
                 orden = new OrdenCliente(texto,file.getName(), file);
-                EnviarOrden.Envia(orden, serv, 5000);
+                EnviarOrden.Envia(orden, serv, puertoServ);
                 break;
 
             case "download":
-                h = new Escuchar(this, 4999);
+                h = new Escuchar(this, puertoCli);
                 h.start();
                 orden = new OrdenCliente(texto, ((String) Interfaz.list.getSelectedValue()).substring(1));
-                EnviarOrden.Envia(orden, serv, 5000);
+                EnviarOrden.Envia(orden, serv, puertoServ);
                 break;
 
             case "delete":
-                h = new Escuchar(this, 4999);
+                h = new Escuchar(this, puertoCli);
                 h.start();
                 orden = new OrdenCliente(texto, ((String) Interfaz.list.getSelectedValue()).substring(1));
-                EnviarOrden.Envia(orden, serv, 5000);
+                EnviarOrden.Envia(orden, serv, puertoServ);
                 break;
 
             case "mkdir":
                 String n = (String) JOptionPane.showInputDialog(Interfaz.frame, "Nombre de la carpeta");
-                h = new Escuchar(this, 4999);
+                h = new Escuchar(this, puertoCli);
                 h.start();
                 orden = new OrdenCliente(texto, n);
-                EnviarOrden.Envia(orden, serv, 5000);
+                EnviarOrden.Envia(orden, serv, puertoServ);
                 break;
 
             case "rmdir":
-                h = new Escuchar(this, 4999);
+                h = new Escuchar(this, puertoCli);
                 h.start();
                 orden = new OrdenCliente(texto, ((String) Interfaz.list.getSelectedValue()).substring(1));
-                EnviarOrden.Envia(orden, serv, 5000);
+                EnviarOrden.Envia(orden, serv, puertoServ);
                 break;
 
             case "atras":
                 if (path.size() > 1) {
                     orden = new OrdenCliente(texto);
-                    h = new Escuchar(this, 4999);
+                    h = new Escuchar(this, puertoCli);
                     h.start();
-                    EnviarOrden.Envia(orden, serv, 5000);
+                    EnviarOrden.Envia(orden, serv, puertoServ);
                 }
                 break;
 
             default:
                 orden = new OrdenCliente(texto);
-                h = new Escuchar(this, 4999);
+                h = new Escuchar(this, puertoCli);
                 h.start();
-                EnviarOrden.Envia(orden, serv, 5000);
+                EnviarOrden.Envia(orden, serv, puertoServ);
                 break;
         }
     }
